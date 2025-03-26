@@ -2,9 +2,14 @@
   "version": 2,
   "public": true,
   "name": "weather-app",
+  "build": {
+    "env": {
+      "OPENWEATHER_API_KEY": "$OPENWEATHER_API_KEY"
+    }
+  },
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/weather",
       "destination": "/api/weather.js"
     },
     {
@@ -30,23 +35,45 @@
         },
         {
           "key": "Permissions-Policy",
-          "value": "geolocation=(self)"
+          "value": "geolocation=(self), microphone=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; img-src 'self' data: openweathermap.org; font-src 'self' cdnjs.cloudflare.com; connect-src 'self' api.openweathermap.org"
         }
       ]
     }
   ],
-  "env": {
-    "OPENWEATHER_API_KEY": "@openweather_api_key"
-  },
   "regions": ["iad1"],
   "builds": [
     {
       "src": "api/weather.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["api/**"]
+      }
     },
     {
       "src": "public/**",
-      "use": "@vercel/static"
+      "use": "@vercel/static",
+      "config": {
+        "cleanUrls": true,
+        "trailingSlash": false
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/weather",
+      "dest": "/api/weather.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/(.*)",
+      "status": 200,
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
     }
   ]
 }
