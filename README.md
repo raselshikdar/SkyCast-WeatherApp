@@ -11,21 +11,6 @@
 ✔️ **Fully Responsive** – Works seamlessly on all devices  
 ✔️ **Secure API Handling** – Uses GitHub secret variables for API keys  
 
-## **📂 Project Structure**  
-
-```
-weather-app/
-├── api/
-│   └── weather.js       # Serverless function for API proxy
-├── css/
-│   └── style.css        # Stylesheet for UI design
-├── js/
-│   └── script.js        # JavaScript for fetching & displaying data
-├── index.html           # Main HTML file
-├── README.md            # Project documentation
-└── .gitignore           # Ignore unnecessary files
-```
-
 ## **🚀 Live Demo**  
 
 🔗 **[View on Vercel]([https://skycast-web.vercel.app/])**  
@@ -67,11 +52,7 @@ vercel deploy
 🔹 **Frontend:** HTML, CSS, JavaScript  
 🔹 **API:** OpenWeather API  
 🔹 **Deployment:** Vercel  
-🔹 **Version Control:** Git & GitHub  
-
-## **📝 License**  
-
-This project is **open-source** and free to use. You are welcome to contribute, modify, and enhance it.  
+🔹 **Version Control:** Git & GitHub    
 
 ## **📩 Contributing**  
 
