@@ -1,13 +1,5 @@
 {
   "version": 2,
-  "name": "weather-app",
-  "public": true,
-  "build": {
-    "env": {
-      "OPENWEATHER_API_KEY": "$OPENWEATHER_API_KEY"
-    }
-  },
-  "regions": ["iad1"],
   "builds": [
     {
       "src": "api/weather.js",
@@ -18,43 +10,18 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/weather",
-      "destination": "/api/weather.js"
+      "src": "/api/weather",
+      "dest": "/api/weather.js",
+      "methods": ["GET"]
     },
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "geolocation=(self)"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; img-src 'self' data: openweathermap.org; font-src 'self' cdnjs.cloudflare.com; connect-src 'self' api.openweathermap.org"
-        }
-      ]
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  "env": {
+    "OPENWEATHER_API_KEY": "$OPENWEATHER_API_KEY"
+  }
 }
