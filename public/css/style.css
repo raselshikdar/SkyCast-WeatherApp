@@ -1,0 +1,181 @@
+:root {
+    --primary: #2B3252;
+    --secondary: #FAD744;
+    --accent: #EF5455;
+    --background: #F6F7FC;
+    --text: #2B3252;
+    --card-bg: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--primary);
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.city-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.search-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.location-btn {
+    background: var(--accent);
+    color: white;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.weather-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.current-weather {
+    grid-column: 1 / -1;
+}
+
+.weather-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.temperature {
+    font-size: 4rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.temp-unit {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: -1.5rem;
+}
+
+.weather-icon {
+    font-size: 5rem;
+    color: var(--secondary);
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--background);
+    border-radius: 8px;
+}
+
+/* Forecast Styles */
+.forecast-section {
+    grid-column: 1 / -1;
+}
+
+.forecast-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.forecast-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.forecast-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Air Quality Styles */
+.aqi-index {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.pollutants-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-container {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
