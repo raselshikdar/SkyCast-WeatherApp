@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "weather-app",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/weather.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(self)"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "OPENWEATHER_API_KEY": "@openweather_api_key"
+  },
+  "regions": ["iad1"],
+  "builds": [
+    {
+      "src": "api/weather.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ]
+}
