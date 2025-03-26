@@ -1,0 +1,45 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "Advanced Weather Dashboard with OpenWeather API",
+  "main": "api/weather.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel start",
+    "build": "vercel build",
+    "deploy": "vercel deploy --prod",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "weather",
+    "dashboard",
+    "openweather",
+    "vercel"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@vercel/node": "^2.8.4",
+    "eslint": "^8.34.0",
+    "prettier": "^2.8.4"
+  },
+  "engines": {
+    "node": ">=16.x"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
