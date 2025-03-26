@@ -1,109 +1,96 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // DOM Elements
-  const cityInput = document.querySelector('.city-input');
-  const searchBtn = document.querySelector('.search-btn');
-  const locationBtn = document.querySelector('.location-btn');
-  const cityName = document.querySelector('.city-name');
-  const tempValue = document.querySelector('.temp-value');
-  const weatherDesc = document.querySelector('.description');
-  const weatherIcon = document.querySelector('.weather-icon');
-  const feelsLike = document.querySelector('.feels-like');
-  const humidity = document.querySelector('.humidity');
-  const wind = document.querySelector('.wind');
+  const elements = {
+    cityInput: document.querySelector('.city-input'),
+    searchBtn: document.querySelector('.search-btn'),
+    locationBtn: document.querySelector('.location-btn'),
+    cityName: document.querySelector('.city-name'),
+    temp: document.querySelector('.temp-value'),
+    description: document.querySelector('.description'),
+    feelsLike: document.querySelector('.feels-like'),
+    humidity: document.querySelector('.humidity'),
+    wind: document.querySelector('.wind'),
+    icon: document.querySelector('.weather-icon')
+  };
+
+  let errorTimeout;
 
   // Event Listeners
-  searchBtn.addEventListener('click', fetchWeather);
-  locationBtn.addEventListener('click', fetchLocationWeather);
-  cityInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') fetchWeather();
-  });
+  elements.searchBtn.addEventListener('click', searchWeather);
+  elements.locationBtn.addEventListener('click', getLocationWeather);
+  elements.cityInput.addEventListener('keypress', e => e.key === 'Enter' && searchWeather());
 
-  async function fetchWeather() {
-    const city = cityInput.value.trim();
+  async function searchWeather() {
+    const city = elements.cityInput.value.trim();
     if (!city) return showError('Please enter a city name');
     
     try {
-      const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
-      const data = await response.json();
-      
-      if (data.error) throw new Error(data.error);
-      
-      updateWeatherUI(data);
+      const data = await fetchData(`/api/weather?city=${encodeURIComponent(city)}`);
+      updateUI(data);
     } catch (error) {
-      showError(error.message);
+      showError(error);
     }
   }
 
-  async function fetchLocationWeather() {
-    if (!navigator.geolocation) {
-      return showError('Geolocation not supported');
-    }
+  async function getLocationWeather() {
+    if (!navigator.geolocation) return showError('Geolocation not supported');
     
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
+      async position => {
         try {
-          const response = await fetch(
+          const data = await fetchData(
             `/api/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}`
           );
-          const data = await response.json();
-          
-          if (data.error) throw new Error(data.error);
-          
-          updateWeatherUI(data);
+          updateUI(data);
         } catch (error) {
-          showError('Failed to get location weather');
+          showError(error);
         }
       },
-      () => {
-        showError('Location access denied');
-      }
+      error => showError(error.message.includes('denied') ? 
+        'Location access denied' : 'Failed to get location')
     );
   }
 
-  function updateWeatherUI(data) {
-    cityName.textContent = `${data.location.name} (${data.location.country})`;
-    tempValue.textContent = `${data.current.temp}°C`;
-    weatherDesc.textContent = data.current.description;
-    feelsLike.textContent = `Feels like: ${data.current.feels_like}°C`;
-    humidity.textContent = `Humidity: ${data.current.humidity}%`;
-    wind.textContent = `Wind: ${data.current.wind} km/h`;
-    
-    // Set weather icon (using Font Awesome classes)
-    const iconClass = getWeatherIconClass(data.current.icon);
-    weatherIcon.className = `fas ${iconClass}`;
-    
-    // Hide any previous errors
-    const errorElement = document.querySelector('.error-message');
-    if (errorElement) errorElement.style.display = 'none';
+  async function fetchData(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Weather service unavailable');
+      }
+      return await response.json();
+    } catch (error) {
+      throw new Error('Connection failed. Try again later.');
+    }
   }
 
-  function getWeatherIconClass(iconCode) {
-    const iconMap = {
-      '01d': 'fa-sun',
-      '01n': 'fa-moon',
-      '02d': 'fa-cloud-sun',
-      '02n': 'fa-cloud-moon',
-      '03': 'fa-cloud',
-      '04': 'fa-cloud-meatball',
-      '09': 'fa-cloud-rain',
-      '10': 'fa-cloud-showers-heavy',
-      '11': 'fa-bolt',
-      '13': 'fa-snowflake',
-      '50': 'fa-smog'
-    };
-    return iconMap[iconCode] || iconMap[iconCode.slice(0, 2)] || 'fa-question';
+  function updateUI(data) {
+    elements.cityName.textContent = `${data.name}${data.country ? ` (${data.country})` : ''}`;
+    elements.temp.textContent = `${data.temp}°C`;
+    elements.description.textContent = data.description;
+    elements.feelsLike.textContent = `Feels like: ${data.feels_like}°C`;
+    elements.humidity.textContent = `Humidity: ${data.humidity}%`;
+    elements.wind.textContent = `Wind: ${data.wind} km/h`;
+    elements.icon.className = `wi wi-owm-${data.icon}`;
+    clearError();
   }
 
   function showError(message) {
-    let errorElement = document.querySelector('.error-message');
-    
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'error-message';
-      document.querySelector('.weather-input').appendChild(errorElement);
-    }
-    
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
+    clearTimeout(errorTimeout);
+    const errorDiv = document.querySelector('.error') || createErrorElement();
+    errorDiv.textContent = typeof message === 'string' ? message : 'Failed to get weather data';
+    errorDiv.style.display = 'block';
+    errorTimeout = setTimeout(() => errorDiv.style.display = 'none', 5000);
+  }
+
+  function createErrorElement() {
+    const div = document.createElement('div');
+    div.className = 'error';
+    document.querySelector('.weather-input').appendChild(div);
+    return div;
+  }
+
+  function clearError() {
+    const errorDiv = document.querySelector('.error');
+    if (errorDiv) errorDiv.style.display = 'none';
   }
 });
