@@ -28,13 +28,13 @@ weather-app/
 
 ## **🚀 Live Demo**  
 
-🔗 **[View on Vercel](https://your-vercel-url.vercel.app/)**  
+🔗 **[View on Vercel]([https://skycast-web.vercel.app/])**  
 
 ## **📖 Installation Guide**  
 
 ### **1️⃣ Clone the Repository**  
 ```sh
-git clone https://github.com/your-username/SkyCast-WeatherApp.git
+git clone https://github.com/raselshikdar/SkyCast-WeatherApp.git
 cd SkyCast-WeatherApp
 ```
 
